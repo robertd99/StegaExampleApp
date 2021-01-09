@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ManageSocialMediasActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/manageSocialMediasTextSearchingId"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:text="Searching:"/>
+
+
+    <Switch
+        android:id="@+id/manageSocialMediasRedditId"
+        android:layout_width="194dp"
+        android:layout_height="35dp"
+        android:text="Reddit"
+        tools:layout_editor_absoluteX="89dp"
+        tools:layout_editor_absoluteY="262dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"/>
+
+    <Switch
+        android:id="@+id/manageSocialMediasImgurId"
+        android:layout_width="194dp"
+        android:layout_height="35dp"
+        android:text="Imgur"
+        tools:layout_editor_absoluteX="89dp"
+        tools:layout_editor_absoluteY="262dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/manageSocialMediasTextResults"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/manageSocialMediasTextSearchingId"
+        android:layout_marginTop="400dp"
+        android:text="Results:"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/manageSocialMediasTextSearchResultsId"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/manageSocialMediasTextResults"
+        android:layout_marginTop="50dp"
+        android:text="No Results yet"
+        />
+
+
+</RelativeLayout>

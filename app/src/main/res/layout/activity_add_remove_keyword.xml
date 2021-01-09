@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddRemoveKeywordActivity">
+
+    <TextView
+        android:id="@+id/subscribeSocialMediaTypeId"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:elevation="10dp"
+        android:text="SocialMediaType"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+
+    <TextView
+        android:id="@+id/showCurrentSubscribedKeywordsId"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="150dp"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:text="No Subscribed Keywords yet"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+    <EditText
+        android:id="@+id/addKeywordId"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="300dp"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:text="Add Keyword"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+    <Button
+        android:id="@+id/addKeywordButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="419dp"
+        android:text="Add written Keyword" />
+
+    <Button
+        android:id="@+id/removeKeywordButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="500dp"
+        android:text="Remove written Keyword" />
+
+
+
+</RelativeLayout>
