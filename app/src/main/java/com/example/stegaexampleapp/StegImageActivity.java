@@ -1,6 +1,7 @@
 package com.example.stegaexampleapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -35,6 +36,9 @@ import pl.droidsonroids.gif.GifImageView;
 import static com.example.stegaexampleapp.UploadFileActivity.REQUEST_IMAGE_GET;
 
 public class StegImageActivity extends AppCompatActivity {
+    private int REQUEST_CODE_PERMISSIONS = 101;
+    private final String[] REQUIRED_PERMISSIONS = new String[]{ "android.permission.WRITE_EXTERNAL_STORAGE"};
+
     ImageView rawImageView;
     ImageView steganoImageView;
     Button choseFile;
@@ -54,6 +58,8 @@ public class StegImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steg_image);
+        ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+
 
         rawGifImageView = (GifImageView) findViewById(R.id.stegImageRawGifView);
 
@@ -113,20 +119,8 @@ public class StegImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (getUriMimType(fullFileUri)!= null) {
-                    File encodedFile = new File(Environment.getExternalStorageDirectory(), fileName.getText().toString()+"."+getUriMimType(fullFileUri) );
-
-                    if (encodedFile.exists()) {
-                        encodedFile.delete();
-                    }
-
-                    try {
-                        FileOutputStream fos = new FileOutputStream(encodedFile.getPath());
-
-                        fos.write(steganographyArray[0]);
-                        fos.close();
-                    } catch (java.io.IOException e) {
-                        Log.e("PictureDemo", "Exception in photoCallback", e);
-                    }
+                    File encodedFile = new File(Environment.getExternalStorageDirectory() + "/" + fileName.getText().toString()+"."+getUriMimType(fullFileUri) );
+                    writeToFile(encodedFile,steganographyArray);
 
 
                 }
@@ -214,6 +208,18 @@ public class StegImageActivity extends AppCompatActivity {
         return  mime.getExtensionFromMimeType(cR.getType(fullFileUri));
 }
 
-
+    private void writeToFile(File file,byte[] bytes){
+        try {
+            if( file.exists()){file.delete();}
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bytes);
+            fos.close();
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
 
 }

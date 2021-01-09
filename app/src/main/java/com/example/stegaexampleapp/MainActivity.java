@@ -3,7 +3,9 @@ package com.example.stegaexampleapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         JSONPersistentManager.getInstance().setJsonPersistentHelper(new JSONPersistentWriter(this));
+
+        Log.i("Android SDK", String.valueOf(Build.VERSION.SDK_INT));
 
         uploadToButton = (Button) findViewById(R.id.stegImageId);
         uploadToButton.setOnClickListener(new View.OnClickListener() {

@@ -106,7 +106,7 @@
         android:layout_marginBottom="14dp"
         android:elevation="10dp"
         android:gravity="center"
-        android:text="Enter File Name"
+        android:text="EnterFileName"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <Button
