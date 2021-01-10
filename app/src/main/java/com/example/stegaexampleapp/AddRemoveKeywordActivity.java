@@ -88,24 +88,10 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
 
     }
 
-    private String jsonmanagertostring() {
-        try {
-            String subscribedKeywords = new String();
-            List<String> keywordList = JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.valueOf(selectedNetworkString.toUpperCase()));
-            for (String string : keywordList) {
-                subscribedKeywords += " " + string;
-            }
-            return subscribedKeywords;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     private String listToString(List<String> list){
         String returnString = new String();
         for(String string: list){
-            returnString += " "+string;
+            returnString += "; "+string;
         }
         return returnString;
     }
