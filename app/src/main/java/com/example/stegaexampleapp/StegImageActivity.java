@@ -39,21 +39,28 @@ public class StegImageActivity extends AppCompatActivity {
     private int REQUEST_CODE_PERMISSIONS = 101;
     private final String[] REQUIRED_PERMISSIONS = new String[]{ "android.permission.WRITE_EXTERNAL_STORAGE"};
 
+    Boolean accesingRawFile;
     ImageView rawImageView;
-    ImageView steganoImageView;
-    Button choseFile;
-    Button computeImage;
-    EditText messageEditText;
-    Uri fullFileUri;
-    Button saveToStorageButton;
-    EditText fileName;
+    ImageView encodedImageView;
     GifImageView rawGifImageView;
+    GifImageView encodedGifImageView;
+    Button choseRawFile;
+    Button loadEncodedFileButton;
+    Button computeImage;
+    Button decodeImageButton;
+    Button saveToStorageButton;
+    TextView decodedTextView;
+    EditText messageEditText;
+    EditText fileName;
+    Uri rawFileUri;
+    Uri encodedFileUri;
 
     byte[] steganographyArray = null;
 
-    Button decodeImageButton;
 
-    TextView decodedTextView;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +69,17 @@ public class StegImageActivity extends AppCompatActivity {
 
 
         rawGifImageView = (GifImageView) findViewById(R.id.stegImageRawGifView);
+        encodedGifImageView = (GifImageView) findViewById(R.id.stegImageEncodedGifView);
 
+        loadEncodedFileButton = findViewById(R.id.stegImageLoadEncodedImageButtonId);
+        loadEncodedFileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                accesingRawFile = false;
+                selectImage();
 
+            }
+        });
 
         decodedTextView = (TextView) findViewById(R.id.stegImageDecodedTextId);
 
@@ -72,7 +88,7 @@ public class StegImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    if(getUriMimType(fullFileUri).equals("png")) {
+                    if(getUriMimType(rawFileUri).equals("png") || getUriMimType(encodedFileUri).equals("png")) {
                         Steganography imageSteg = new ImageSteg();
                         byte[] decodedResult = imageSteg.decode(steganographyArray);
                         decodedTextView.setText(new String(decodedResult));
@@ -92,7 +108,7 @@ public class StegImageActivity extends AppCompatActivity {
 
         rawImageView = (ImageView) findViewById(R.id.stegImageRawImageView);
 
-        steganoImageView= (ImageView) findViewById(R.id.stegImageSteganographedImageView);
+        encodedImageView = (ImageView) findViewById(R.id.stegImageSteganographedImageView);
 
         messageEditText = (EditText) findViewById(R.id.stegImageEnterMessageEditText);
 
@@ -100,15 +116,18 @@ public class StegImageActivity extends AppCompatActivity {
         computeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                computeStegImage(fullFileUri, messageEditText.getText().toString().getBytes());
+                computeSteganographyArrayFromByteArray(getBytesFromUri(rawFileUri), messageEditText.getText().toString().getBytes());
+                setImageViewFromByteArray(steganographyArray, encodedImageView);
             }
         });
 
-        choseFile = (Button) findViewById(R.id.stegImageChoseFileButton);
-        choseFile.setOnClickListener(new View.OnClickListener() {
+        choseRawFile = (Button) findViewById(R.id.stegImageChoseFileButton);
+        choseRawFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                accesingRawFile = true;
                 selectImage();
+
             }
         });
 
@@ -118,8 +137,8 @@ public class StegImageActivity extends AppCompatActivity {
         saveToStorageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getUriMimType(fullFileUri)!= null) {
-                    File encodedFile = new File(Environment.getExternalStorageDirectory() + "/" + fileName.getText().toString()+"."+getUriMimType(fullFileUri) );
+                if (getUriMimType(rawFileUri)!= null) {
+                    File encodedFile = new File(Environment.getExternalStorageDirectory() + "/" + fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
                     writeToFile(encodedFile,steganographyArray);
                     Log.i("Is finished", "writetofile finished");
 
@@ -129,18 +148,18 @@ public class StegImageActivity extends AppCompatActivity {
         });
     }
 
-    private void computeStegImage(Uri uri, byte[] message) {
+    public void setImageViewFromByteArray(byte[] bytes, ImageView imageView){
+        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        imageView.setImageBitmap(bmp);
+    }
+
+    private void computeSteganographyArrayFromByteArray(byte[] inputData, byte[] message) {
         try {
-            InputStream iStream =   getContentResolver().openInputStream(uri);
-            byte[] inputData = getMyBytes(iStream);
-            if(getUriMimType(fullFileUri).equals("png")) {
+            if(getUriMimType(rawFileUri).equals("png")) {
                 Log.i("no stegano img size", String.valueOf(inputData.length));
 
                 Steganography steganography = new ImageSteg();
                 steganographyArray = steganography.encode(inputData, message);
-                Bitmap bmp = BitmapFactory.decodeByteArray(steganographyArray, 0, steganographyArray.length);
-
-                steganoImageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, steganoImageView.getWidth(), steganoImageView.getHeight(), false));
             }
 
         } catch (IOException e) {
@@ -154,6 +173,16 @@ public class StegImageActivity extends AppCompatActivity {
         } catch (MediaReassemblingException e) {
             e.printStackTrace();
         }
+    }
+
+    private byte[] getBytesFromUri(Uri uri) {
+        try {
+            InputStream iStream =   getContentResolver().openInputStream(uri);
+            return getMyBytes(iStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private byte[] getMyBytes(InputStream iStream) throws IOException {
@@ -180,34 +209,57 @@ public class StegImageActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         resetAllViewsAndArrays();
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
-            Bitmap thumbnail = data.getParcelableExtra("data");
-            fullFileUri = data.getData();
-            Log.i("Image Path", fullFileUri.getEncodedPath());
-            Log.i("file type", getUriMimType(fullFileUri));
-            if(getUriMimType(fullFileUri).equals("png")){
-                rawImageView.setImageURI(fullFileUri);
+        if(accesingRawFile){
+            if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
+                Bitmap thumbnail = data.getParcelableExtra("data");
+                rawFileUri = data.getData();
+                Log.i("raw Image Path", rawFileUri.getEncodedPath());
+                Log.i("raw file type", getUriMimType(rawFileUri));
+                if (getUriMimType(rawFileUri).equals("png")) {
+                    rawImageView.setImageURI(rawFileUri);
+                }
+                if (getUriMimType(rawFileUri).equals("gif")) {
+                    rawGifImageView.setImageURI(rawFileUri);
+                }
             }
-            if(getUriMimType(fullFileUri).equals("gif")){
-                rawGifImageView.setImageURI(fullFileUri);
-            }
-
         }
+        else{
+            if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
+                Bitmap thumbnail = data.getParcelableExtra("data");
+                encodedFileUri = data.getData();
+                Log.i("encoded Image Path", encodedFileUri.getEncodedPath());
+                Log.i("encoded file type", getUriMimType(encodedFileUri));
+                steganographyArray = getBytesFromUri(encodedFileUri);
+                if (getUriMimType(encodedFileUri).equals("png")) {
+                    encodedImageView.setImageURI(encodedFileUri);
+                }
+                if (getUriMimType(encodedFileUri).equals("gif")) {
+                    encodedGifImageView.setImageURI(encodedFileUri);
+                }
+            }
+        }
+
     }
 
     private void resetAllViewsAndArrays() {
         rawGifImageView.setImageResource(0);
         rawImageView.setImageResource(0);
-        steganoImageView.setImageResource(0);
-        fullFileUri = null;
+        encodedImageView.setImageResource(0);
+        rawFileUri = null;
+        encodedFileUri = null;
         steganographyArray = null;
     }
 
     private String getUriMimType(Uri uri){
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return  mime.getExtensionFromMimeType(cR.getType(fullFileUri));
-}
+        if(uri!=null) {
+            ContentResolver cR = getContentResolver();
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            return mime.getExtensionFromMimeType(cR.getType(uri));
+        }
+        else{
+            return "no readable file";
+        }
+    }
 
     private void writeToFile(File file,byte[] bytes){
         try {
@@ -218,6 +270,7 @@ public class StegImageActivity extends AppCompatActivity {
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(bytes);
             fos.close();
+            fos.flush();
         } catch (Exception e) {
             e.getMessage();
         }

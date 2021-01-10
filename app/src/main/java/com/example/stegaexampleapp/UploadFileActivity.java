@@ -2,6 +2,7 @@ package com.example.stegaexampleapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,11 +23,18 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 import de.htw.berlin.steganography.apis.MediaType;
+import de.htw.berlin.steganography.apis.SocialMedia;
+import de.htw.berlin.steganography.apis.imgur.Imgur;
 import de.htw.berlin.steganography.apis.models.Token;
 import de.htw.berlin.steganography.apis.reddit.Reddit;
 import de.htw.berlin.steganography.apis.utils.BlobConverterImpl;
 import de.htw.berlin.steganography.OAuthMainActivity;
 import de.htw.berlin.steganography.steganography.Steganography;
+import de.htw.berlin.steganography.steganography.exceptions.MediaCapacityException;
+import de.htw.berlin.steganography.steganography.exceptions.MediaNotFoundException;
+import de.htw.berlin.steganography.steganography.exceptions.MediaReassemblingException;
+import de.htw.berlin.steganography.steganography.exceptions.UnknownStegFormatException;
+import de.htw.berlin.steganography.steganography.exceptions.UnsupportedMediaTypeException;
 import de.htw.berlin.steganography.steganography.image.ImageSteg;
 
 public class UploadFileActivity extends AppCompatActivity {
@@ -40,6 +49,7 @@ public class UploadFileActivity extends AppCompatActivity {
     String selectedNetworkString;
     TextView selectedNetworkTextView;
     Uri fullFileUri;
+    byte[] steganographyArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +89,38 @@ public class UploadFileActivity extends AppCompatActivity {
                 Runnable run = new Runnable() {
                     @Override
                     public void run() {
-                        Reddit reddit = new Reddit();
-                        reddit.setToken(new Token(accesToken,999999999));
-                        byte[] bytes = getByteArrayFromUri(fullFileUri);
-                        Log.i("UploadFile bytes", String.valueOf(bytes.length));
+                        if (steganographyArray!=null && fullFileUri != null && selectedNetworkString != null) {
+                            SocialMedia socialMedia = null;
+                            if(selectedNetworkString.equals("reddit")) {
+                                socialMedia = new Reddit();
+                            }
+                            if(selectedNetworkString.equals("imgur")){
+                                socialMedia = new Imgur();
+                            }
+                            socialMedia.setToken(new Token(accesToken, 999999999));
 
-                        reddit.postToSocialNetwork(bytes,MediaType.PNG, "test");
-                        //reddit.postToSocialNetwork(BlobConverterImpl.downloadToByte("https://compress-or-die.com/public/understanding-png/assets/lena-dirty-transparency-corrected-cv.png"),MediaType.PNG, "test");
+                            byte[] steganographedBytes = null;
+                            if(getUriMimType(fullFileUri).equals("png")) {
+                                Steganography imageSteg = new ImageSteg();
+                                try {
+                                    steganographedBytes = imageSteg.encode(steganographyArray, enterMessage.getText().toString().getBytes());
+                                    Log.i("steganographedBytes size", String.valueOf(steganographedBytes.length));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (MediaNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch (UnsupportedMediaTypeException e) {
+                                    e.printStackTrace();
+                                }
+                                catch (MediaReassemblingException e) {
+                                    e.printStackTrace();
+                                } catch (MediaCapacityException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            Log.i("UploadFile bytes", String.valueOf(steganographedBytes.length));
+                            socialMedia.postToSocialNetwork(steganographedBytes, MediaType.valueOf(getUriMimType(fullFileUri).toUpperCase()), "test");
+                        }
                     }
                 };
                 Thread t = new Thread(run);
@@ -138,10 +173,21 @@ public class UploadFileActivity extends AppCompatActivity {
             fullFileUri = fullPhotoUri;
             Log.i("Image Path", fullPhotoUri.getEncodedPath());
             imageView.setImageURI(fullPhotoUri);
+            steganographyArray = getByteArrayFromUri(fullPhotoUri);
 
 
         }
     }
 
+    private String getUriMimType(Uri uri){
+        if(uri!=null) {
+            ContentResolver cR = getContentResolver();
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            return mime.getExtensionFromMimeType(cR.getType(uri));
+        }
+        else{
+            return "no readable file";
+        }
+    }
 
 }

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".StegImageActivity">
 
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <Button
         android:id="@+id/stegImageChoseFileButton"
         android:text="Chose File"
@@ -28,6 +30,15 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/stegImageRawGifView"
+        android:layout_width="180dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/stegImageChoseFileButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/stegImageEncodedGifView"
         android:layout_width="180dp"
         android:layout_height="200dp"
         android:layout_below="@id/stegImageChoseFileButton"
@@ -69,41 +80,52 @@
         android:layout_below="@id/stegImageComputeStegButton"/>
 
 
-
-
-
     <Button
         android:id="@+id/stegImageDecodeButtonId"
-        android:text="Decode Image"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_height="50dp"
         android:layout_below="@id/stegImageSteganographedImageView"
-        />
+
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="25dp"
+        android:text="Decode Image" />
+
+    <Button
+        android:id="@+id/stegImageLoadEncodedImageButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@id/stegImageSteganographedImageView"
+
+
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="18dp"
+        android:text="Load Encoded Image" />
 
     <TextView
         android:id="@+id/stegImageDecodedTextId"
         android:layout_width="match_parent"
-        android:layout_height="112dp"
-        android:layout_marginTop="-40dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/stegImageDecodeButtonId"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="18dp"
         android:elevation="10dp"
         android:gravity="center"
-        android:text="Nothing To See"
-        android:layout_below="@id/stegImageDecodeButtonId"
-        />
+        android:text="Nothing To See" />
 
     <EditText
         android:id="@+id/stegImageEnterFileNameEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="112dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_below="@id/stegImageDecodedTextId"
         android:layout_alignParentStart="true"
 
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="73dp"
-        android:layout_marginTop="-38dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="-1dp"
         android:elevation="10dp"
         android:gravity="center"
         android:text="EnterFileName"
@@ -116,9 +138,9 @@
         android:layout_below="@id/stegImageDecodedTextId"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="false"
-        android:layout_marginTop="-35dp"
-        android:layout_marginEnd="42dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="43dp"
         android:text="Save Encoded Image" />
 
-
 </RelativeLayout>
+</ScrollView>

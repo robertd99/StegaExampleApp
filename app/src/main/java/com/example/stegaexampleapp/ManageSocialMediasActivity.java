@@ -23,6 +23,8 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         ImplSocialMediaResults implSocialMediaResults = new ImplSocialMediaResults(searchResultTextView);
         Reddit reddit = new Reddit();
         reddit.addAsListener(implSocialMediaResults);
+        reddit.subscribeToKeyword("test");
+        reddit.startSearch();
 
 
 
