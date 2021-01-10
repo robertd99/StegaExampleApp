@@ -15,4 +15,9 @@ public class SocialMediaListenerImpl implements SocialMediaListener {
             messageList.add(string);
         }
     }
+
+    @Override
+    public long updateSocialMediaLastTimeChecked(long l) {
+        return 0;
+    }
 }

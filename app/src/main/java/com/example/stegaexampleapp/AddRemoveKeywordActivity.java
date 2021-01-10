@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.htw.berlin.steganography.apis.SocialMedia;
+import de.htw.berlin.steganography.apis.imgur.Imgur;
 import de.htw.berlin.steganography.apis.models.APINames;
+import de.htw.berlin.steganography.apis.reddit.Reddit;
 import de.htw.berlin.steganography.persistence.JSONPersistentManager;
 
 public class AddRemoveKeywordActivity extends AppCompatActivity {
@@ -21,25 +24,49 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
     EditText writtenKeyword;
     Button addKeywordBtn;
     Button removeKeywordBtn;
+    SocialMedia socialMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_remove_keyword);
 
+
         selectedNetworkString = getIntent().getStringExtra("selectedNetwork");
+        if(selectedNetworkString.equals("reddit")){
+            socialMedia = new Reddit();
+        }
+        if(selectedNetworkString.equals("imgur")){
+            socialMedia = new Imgur();
+        }
+        try {
+            socialMedia.setAllSubscribedKeywords(JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.valueOf(selectedNetworkString.toUpperCase())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         selectedSocialMedia = (TextView) findViewById(R.id.subscribeSocialMediaTypeId);
         selectedSocialMedia.setText(selectedNetworkString);
         currentSubscribedKeywords = (TextView) findViewById(R.id.showCurrentSubscribedKeywordsId);
+
+        currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
+
         writtenKeyword = (EditText) findViewById(R.id.addKeywordId);
 
         addKeywordBtn = (Button) findViewById(R.id.addKeywordButtonId);
         addKeywordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String keyword = writtenKeyword.getText().toString();
-                JSONPersistentManager.getInstance().addKeywordForAPI(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
-                currentSubscribedKeywords.setText(jsonmanagertostring());
+
+                try {
+                    String keyword = writtenKeyword.getText().toString();
+                    JSONPersistentManager.getInstance().addKeywordForAPI(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
+                    socialMedia.subscribeToKeyword(keyword);
+                    currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
             }
         });
@@ -50,14 +77,14 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String keyword = writtenKeyword.getText().toString();
                 JSONPersistentManager.getInstance().removeKeywordForAPI(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
-                currentSubscribedKeywords.setText(jsonmanagertostring());
+                socialMedia.unsubscribeKeyword(keyword);
+                currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
 
             }
         });
 
 
 
-        currentSubscribedKeywords.setText(jsonmanagertostring());
 
     }
 
@@ -73,5 +100,13 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private String listToString(List<String> list){
+        String returnString = new String();
+        for(String string: list){
+            returnString += " "+string;
+        }
+        return returnString;
     }
 }

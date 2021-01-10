@@ -27,4 +27,9 @@ public class ImplSocialMediaResults implements SocialMediaListener {
         resultsTextView.setText(result);
     }
 
+    @Override
+    public long updateSocialMediaLastTimeChecked(long l) {
+        return 0;
+    }
+
 }
