@@ -37,7 +37,7 @@ import static com.example.stegaexampleapp.UploadFileActivity.REQUEST_IMAGE_GET;
 
 public class StegImageActivity extends AppCompatActivity {
     private int REQUEST_CODE_PERMISSIONS = 101;
-    private final String[] REQUIRED_PERMISSIONS = new String[]{ "android.permission.WRITE_EXTERNAL_STORAGE"};
+    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"};
 
     Boolean accesingRawFile;
     ImageView rawImageView;
@@ -121,6 +121,7 @@ public class StegImageActivity extends AppCompatActivity {
             }
         });
 
+
         choseRawFile = (Button) findViewById(R.id.stegImageChoseFileButton);
         choseRawFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,9 +139,12 @@ public class StegImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (getUriMimType(rawFileUri)!= null) {
-                    File encodedFile = new File(Environment.getExternalStorageDirectory() + "/" + fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
+
+                    File encodedFile = new File(getBaseContext().getExternalFilesDir(null) , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
+
+                    //File encodedFile = new File(Environment.getExternalStorageDirectory() , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
                     writeToFile(encodedFile,steganographyArray);
-                    Log.i("Is finished", "writetofile finished");
+                    Log.i("writeToFile finished", "filepath: " + encodedFile.getAbsolutePath());
 
 
                 }
