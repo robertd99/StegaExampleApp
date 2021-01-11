@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ import de.htw.berlin.steganography.steganography.image.ImageSteg;
 public class UploadFileActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_GET = 1;
+    ScrollView scrollView;
     Button uploadFileBtn;
     Button choseFileUploadButton;
     EditText enterMessage;
@@ -59,6 +61,8 @@ public class UploadFileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.oauth_activity_main);
         setContentView(R.layout.activity_upload_file);
+
+        scrollView = findViewById(R.id.uploadFileScrollView);
 
         progressBar = findViewById(R.id.uploadFileProgressBar);
         progressBar.setVisibility(View.GONE);
@@ -109,6 +113,14 @@ public class UploadFileActivity extends AppCompatActivity {
 
                                 }
                             });
+
+                            getUploadFileActivity().getScrollView().postDelayed(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    getScrollView().fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            },100);
 
 
 
@@ -235,6 +247,10 @@ public class UploadFileActivity extends AppCompatActivity {
 
     public UploadFileActivity getUploadFileActivity(){
         return this;
+    }
+
+    public ScrollView getScrollView(){
+        return scrollView;
     }
 
 }
