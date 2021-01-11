@@ -64,7 +64,9 @@ public class UploadFileActivity extends AppCompatActivity {
         Log.i("UploadFile accesToken:",accesToken);
 
         selectedNetworkTextView = (TextView) findViewById(R.id.uploadFileSocialMediaTypeId);
-        selectedNetworkTextView.setText("selectedNetwork: "+ selectedNetworkString +"\naccesToken: "+ accesToken);
+        selectedNetworkTextView.setText(selectedNetworkString);
+        Log.i("UploadFileActivity AccesToken", accesToken);
+        Log.i("UploadFileActvity selectedNetowrk", selectedNetworkString);
 
         imageView = (ImageView) findViewById(R.id.uploadFileImageId);
 

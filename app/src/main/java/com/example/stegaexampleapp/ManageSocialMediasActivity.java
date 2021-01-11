@@ -32,6 +32,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 
         implSocialMediaResults = new ImplSocialMediaResults(this);
         reddit = new Reddit();
+        reddit.addAsListener(implSocialMediaResults);
         reddit.subscribeToKeyword("test");
 
         redditSearchingONOFF = findViewById(R.id.manageSocialMediasRedditSearchingONOFF);
