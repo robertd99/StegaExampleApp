@@ -121,7 +121,7 @@ public class UploadFileActivity extends AppCompatActivity {
                                 }
                             }
                             Log.i("UploadFile bytes", String.valueOf(steganographedBytes.length));
-                            socialMedia.postToSocialNetwork(steganographedBytes, MediaType.valueOf(getUriMimType(fullFileUri).toUpperCase()), "test");
+                            socialMedia.postToSocialNetwork(steganographedBytes, MediaType.valueOf(getUriMimType(fullFileUri).toUpperCase()), enterSearchKeyword.getText().toString());
                         }
                     }
                 };
