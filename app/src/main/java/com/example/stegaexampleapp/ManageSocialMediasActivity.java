@@ -41,11 +41,11 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     reddit.startSearch();
-                    redditSearchingONOFF.setText("ON");
+                    redditSearchingONOFF.setText("Searching: ON");
                 }
                 else{
                     reddit.stopSearch();
-                    redditSearchingONOFF.setText("OFF");
+                    redditSearchingONOFF.setText("Searching: OFF");
                 }
             }
         });
