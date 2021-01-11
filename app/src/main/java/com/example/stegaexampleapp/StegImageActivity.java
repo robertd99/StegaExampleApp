@@ -116,8 +116,13 @@ public class StegImageActivity extends AppCompatActivity {
         computeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                computeSteganographyArrayFromByteArray(getBytesFromUri(rawFileUri), messageEditText.getText().toString().getBytes());
-                setImageViewFromByteArray(steganographyArray, encodedImageView);
+                steganographyArray =  computeSteganographyArrayFromByteArray(getUriMimType(rawFileUri), getBytesFromUri(rawFileUri), messageEditText.getText().toString().getBytes());
+                if(getUriMimType(rawFileUri).equals("png")) {
+                    setImageViewFromByteArray(steganographyArray, encodedImageView);
+                }
+                if(getUriMimType(rawFileUri).equals("gif")) {
+                    setImageViewFromByteArray(steganographyArray, encodedGifImageView);
+                }
             }
         });
 
@@ -157,13 +162,13 @@ public class StegImageActivity extends AppCompatActivity {
         imageView.setImageBitmap(bmp);
     }
 
-    private void computeSteganographyArrayFromByteArray(byte[] inputData, byte[] message) {
+    private byte[] computeSteganographyArrayFromByteArray(String mimeType, byte[] inputData, byte[] message) {
         try {
-            if(getUriMimType(rawFileUri).equals("png")) {
+            if(mimeType.equals("png")) {
                 Log.i("no stegano img size", String.valueOf(inputData.length));
 
                 Steganography steganography = new ImageSteg();
-                steganographyArray = steganography.encode(inputData, message);
+                return steganography.encode(inputData, message);
             }
 
         } catch (IOException e) {
@@ -177,6 +182,7 @@ public class StegImageActivity extends AppCompatActivity {
         } catch (MediaReassemblingException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private byte[] getBytesFromUri(Uri uri) {
@@ -265,7 +271,7 @@ public class StegImageActivity extends AppCompatActivity {
         }
     }
 
-    private void writeToFile(File file,byte[] bytes){
+    private boolean writeToFile(File file,byte[] bytes){
         try {
             if( file.exists()){file.delete();}
             if (!file.exists()) {
@@ -275,9 +281,11 @@ public class StegImageActivity extends AppCompatActivity {
             fos.write(bytes);
             fos.close();
             fos.flush();
+            return true;
         } catch (Exception e) {
             e.getMessage();
         }
+        return false;
     }
 
 }
