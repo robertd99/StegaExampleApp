@@ -7,6 +7,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.htw.berlin.steganography.apis.SocialMedia;
@@ -19,7 +20,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
     TextView redditSearchingONOFF;
     TextView searchResultTextViewReddit;
 
-    List<String> resultMessagesReddit;
+    List<String> resultMessagesReddit = new ArrayList<>();
     long lastTimeCheckedReddit;
     ImplSocialMediaResults implSocialMediaResults;
 
@@ -65,18 +66,36 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
                 resultMessagesReddit.add(string);
             }
         }
-        updateResultViews();
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                updateResultViews();
+
+            }
+        });
     }
 
     public void setLastTimeChecked(long lastTimeChecked, String socialMediaType){
         if(socialMediaType.equals("reddit")){
             lastTimeCheckedReddit = lastTimeChecked;
         }
-        updateResultViews();
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                updateResultViews();
+
+            }
+        });
+
+
     }
 
     private void updateResultViews() {
-        searchResultTextViewReddit.setText("Messages: "+ String.join(", ", resultMessagesReddit) + " Last Time Checked:: "+ lastTimeCheckedReddit);
+        searchResultTextViewReddit.setText(String.join(", ", resultMessagesReddit) + "\n Last Time Checked: "+ lastTimeCheckedReddit);
     }
 
 

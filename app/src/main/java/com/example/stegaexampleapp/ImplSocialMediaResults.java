@@ -38,6 +38,7 @@ public class ImplSocialMediaResults implements SocialMediaListener {
     @Override
     public void updateSocialMediaLastTimeChecked(long l, String s) {
         lastTimeChecked = l;
+        activity.setLastTimeChecked(l,s);
         Log.i("socialMediaListener updateSocialMediaLastTimeChecked()", "SocialMedia Type: "+ s + " lastTimeChecked: "+String.valueOf(l));
 
     }
