@@ -6,53 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".ManageSocialMediasActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/manageSocialMediasTextSearchingId"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:text="Searching:"/>
-
-
     <Switch
-        android:id="@+id/manageSocialMediasRedditId"
+        android:id="@+id/manageSocialMediasRedditSwitch"
         android:layout_width="194dp"
         android:layout_height="35dp"
         android:text="Reddit"
-        tools:layout_editor_absoluteX="89dp"
-        tools:layout_editor_absoluteY="262dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/manageSocialMediasRedditSearchingONOFF"
+        android:layout_below="@id/manageSocialMediasRedditSwitch"
+        android:layout_marginTop="30dp"
+        android:text="Searching: OFF"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/manageSocialMediasRedditSwitch"
+        android:layout_marginTop="60dp"
+        android:text="Results:"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/manageSocialMediasResultTextViewReddit"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/manageSocialMediasRedditSwitch"
+        android:layout_marginTop="90dp"
+        android:text="No Results yet"
+        />
+
+
+
+
+
+
     <Switch
-        android:id="@+id/manageSocialMediasImgurId"
+        android:id="@+id/manageSocialMediasImgurSwitch"
         android:layout_width="194dp"
         android:layout_height="35dp"
         android:text="Imgur"
         tools:layout_editor_absoluteX="89dp"
         tools:layout_editor_absoluteY="262dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"/>
+        android:layout_marginTop="400dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/manageSocialMediasTextResults"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/manageSocialMediasTextSearchingId"
-        android:layout_marginTop="400dp"
-        android:text="Results:"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/manageSocialMediasTextSearchResultsId"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/manageSocialMediasTextResults"
-        android:layout_marginTop="50dp"
-        android:text="No Results yet"
-        />
+
+
 
 
 </RelativeLayout>

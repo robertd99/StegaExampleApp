@@ -1,5 +1,6 @@
 package com.example.stegaexampleapp;
 
+import android.app.Activity;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -13,11 +14,11 @@ import static java.lang.String.join;
 public class ImplSocialMediaResults implements SocialMediaListener {
     List<String> resultList = new ArrayList<>();
     long lastTimeChecked;
-    TextView resultsTextView;
+    ManageSocialMediasActivity activity;
     String apiname;
 
-    public ImplSocialMediaResults(TextView textView){
-        resultsTextView = textView;
+    public ImplSocialMediaResults(ManageSocialMediasActivity activity){
+         this.activity = activity;
     }
 
 
@@ -26,7 +27,8 @@ public class ImplSocialMediaResults implements SocialMediaListener {
         for(String string: list){
             resultList.add(string);
         }
-        Log.i("write message to log", writeMessageToLog());
+        Log.i("socialMediaListener updateSocialMediaMessage()", "SocialMedia Type: "+ s + " Message: "+ writeMessageToLog());
+        activity.setSearchResultMessage(resultList, s);
     }
 
     private String writeMessageToLog() {
@@ -35,9 +37,8 @@ public class ImplSocialMediaResults implements SocialMediaListener {
 
     @Override
     public void updateSocialMediaLastTimeChecked(long l, String s) {
-        Log.i("socialMediaListener last time checked call", "social media lsitener last time checked got called with  "+String.valueOf(l));
         lastTimeChecked = l;
-        Log.i("final last time checked", String.valueOf(l));
+        Log.i("socialMediaListener updateSocialMediaLastTimeChecked()", "SocialMedia Type: "+ s + " lastTimeChecked: "+String.valueOf(l));
 
     }
 
