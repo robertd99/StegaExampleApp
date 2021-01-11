@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htw.berlin.steganography.apis.SocialMediaListener;
+import de.htw.berlin.steganography.apis.models.APINames;
+import de.htw.berlin.steganography.persistence.JSONPersistentManager;
 
 import static java.lang.String.join;
 
@@ -29,6 +31,7 @@ public class ImplSocialMediaResults implements SocialMediaListener {
         }
         Log.i("socialMediaListener updateSocialMediaMessage()", "SocialMedia Type: "+ s + " Message: "+ writeMessageToLog());
         activity.setSearchResultMessage(resultList, s);
+
     }
 
     private String writeMessageToLog() {
@@ -40,7 +43,7 @@ public class ImplSocialMediaResults implements SocialMediaListener {
         lastTimeChecked = l;
         activity.setLastTimeChecked(l,s);
         Log.i("socialMediaListener updateSocialMediaLastTimeChecked()", "SocialMedia Type: "+ s + " lastTimeChecked: "+String.valueOf(l));
-
+        JSONPersistentManager.getInstance().setLastTimeCheckedForAPI(APINames.valueOf(s.toUpperCase()),lastTimeChecked);
     }
 
 

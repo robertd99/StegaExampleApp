@@ -3,6 +3,7 @@ package com.example.stegaexampleapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -11,8 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htw.berlin.steganography.apis.SocialMedia;
-import de.htw.berlin.steganography.apis.SocialMediaListener;
+import de.htw.berlin.steganography.apis.models.APINames;
 import de.htw.berlin.steganography.apis.reddit.Reddit;
+import de.htw.berlin.steganography.persistence.JSONPersistentManager;
 
 public class ManageSocialMediasActivity extends AppCompatActivity {
 
@@ -21,7 +23,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
     TextView searchResultTextViewReddit;
 
     List<String> resultMessagesReddit = new ArrayList<>();
-    long lastTimeCheckedReddit;
+    long lastTimeCheckedReddit = 0;
     ImplSocialMediaResults implSocialMediaResults;
 
     SocialMedia reddit;
@@ -31,10 +33,20 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_social_medias);
 
+        searchResultTextViewReddit = (TextView) findViewById(R.id.manageSocialMediasResultTextViewReddit);
+
+
         implSocialMediaResults = new ImplSocialMediaResults(this);
         reddit = new Reddit();
         reddit.addAsListener(implSocialMediaResults);
-        reddit.subscribeToKeyword("test");
+        //reddit.setLastTimeChecked(JSONPersistentManager.getInstance().getLastTimeCheckedForAPI(APINames.REDDIT));
+        reddit.setLastTimeChecked(0);
+        String keyword = "test";
+        reddit.subscribeToKeyword(keyword);
+        JSONPersistentManager.getInstance().addKeywordForAPI(APINames.REDDIT, keyword);
+        reddit.setAllSubscribedKeywords(JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.REDDIT));
+        Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywords()));
+        Log.i("reddit last time checked keywords",String.valueOf(reddit.getLastTimeChecked()));
 
         redditSearchingONOFF = findViewById(R.id.manageSocialMediasRedditSearchingONOFF);
         redditSwitch = findViewById(R.id.manageSocialMediasRedditSwitch);
@@ -51,7 +63,6 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
                 }
             }
         });
-        searchResultTextViewReddit = (TextView) findViewById(R.id.manageSocialMediasResultTextViewReddit);
 
 
 
@@ -66,37 +77,30 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
                 resultMessagesReddit.add(string);
             }
         }
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                updateResultViews();
-
-            }
-        });
+        updateResultViewsReddit();
     }
 
     public void setLastTimeChecked(long lastTimeChecked, String socialMediaType){
         if(socialMediaType.equals("reddit")){
             lastTimeCheckedReddit = lastTimeChecked;
         }
+        updateResultViewsReddit();
+
+
+    }
+
+    private void updateResultViewsReddit() {
         runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
 
-                updateResultViews();
+                searchResultTextViewReddit.setText(String.join(", ", resultMessagesReddit) + "\n Last Time Checked: "+ lastTimeCheckedReddit);
+
 
             }
         });
-
-
-    }
-
-    private void updateResultViews() {
-        searchResultTextViewReddit.setText(String.join(", ", resultMessagesReddit) + "\n Last Time Checked: "+ lastTimeCheckedReddit);
-    }
+        }
 
 
 
