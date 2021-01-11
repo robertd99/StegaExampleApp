@@ -71,7 +71,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 
     }
 
-    public void setSearchResultMessage(List<String> message, String socialMediaType) {
+    public void addSearchResultMessages(List<String> message, String socialMediaType) {
         if(socialMediaType.equals("reddit")){
             for(String string : message) {
                 allResultMessagesReddit.add(string);

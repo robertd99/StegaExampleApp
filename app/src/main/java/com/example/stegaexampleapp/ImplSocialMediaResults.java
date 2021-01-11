@@ -1,8 +1,6 @@
 package com.example.stegaexampleapp;
 
-import android.app.Activity;
 import android.util.Log;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,7 @@ public class ImplSocialMediaResults implements SocialMediaListener {
             resultList.add(string);
         }
         Log.i("socialMediaListener updateSocialMediaMessage()", "SocialMedia Type: "+ s + " Message: "+ writeMessageToLog());
-        activity.setSearchResultMessage(resultList, s);
+        activity.addSearchResultMessages(resultList, s);
 
     }
 
