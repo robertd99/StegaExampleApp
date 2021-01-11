@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -148,9 +149,22 @@ public class StegImageActivity extends AppCompatActivity {
                     File encodedFile = new File(getBaseContext().getExternalFilesDir(null) , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
 
                     //File encodedFile = new File(Environment.getExternalStorageDirectory() , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
-                    writeToFile(encodedFile,steganographyArray);
+                    boolean savedFile = writeToFile(encodedFile,steganographyArray);
                     Log.i("StegImageActivity writeToFile finished", "filepath: " + encodedFile.getAbsolutePath());
+                    runOnUiThread(new Runnable() {
 
+                        @Override
+                        public void run() {
+                            if(savedFile){
+                                Toast.makeText(getStegImageActivity(), "Saved File to "+ encodedFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(getStegImageActivity(), "Saving File failed", Toast.LENGTH_LONG).show();
+
+                            }
+
+                        }
+                    });
 
                 }
             }
@@ -288,4 +302,7 @@ public class StegImageActivity extends AppCompatActivity {
         return false;
     }
 
+    public StegImageActivity getStegImageActivity(){
+        return this;
+    }
 }
