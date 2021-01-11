@@ -78,7 +78,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         searchResultTextViewReddit.setText("Messages: "+ String.join(", ", resultMessagesReddit) + " Last Time Checked:: "+ lastTimeCheckedReddit);
     }
 
-   
+
 
 
 }
