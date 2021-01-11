@@ -14,7 +14,9 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,12 +52,16 @@ public class UploadFileActivity extends AppCompatActivity {
     TextView selectedNetworkTextView;
     Uri fullFileUri;
     byte[] steganographyArray;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.oauth_activity_main);
         setContentView(R.layout.activity_upload_file);
+
+        progressBar = findViewById(R.id.uploadFileProgressBar);
+        progressBar.setVisibility(View.GONE);
 
         selectedNetworkString = getIntent().getStringExtra("selectedNetwork");
 
@@ -91,7 +97,21 @@ public class UploadFileActivity extends AppCompatActivity {
                 Runnable run = new Runnable() {
                     @Override
                     public void run() {
+
                         if (steganographyArray!=null && fullFileUri != null && selectedNetworkString != null) {
+
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    progressBar.setVisibility(View.VISIBLE);
+
+                                }
+                            });
+
+
+
                             SocialMedia socialMedia = null;
                             if(selectedNetworkString.equals("reddit")) {
                                 socialMedia = new Reddit();
@@ -121,7 +141,28 @@ public class UploadFileActivity extends AppCompatActivity {
                                 }
                             }
                             Log.i("UploadFile bytes", String.valueOf(steganographedBytes.length));
-                            socialMedia.postToSocialNetwork(steganographedBytes, MediaType.valueOf(getUriMimType(fullFileUri).toUpperCase()), enterSearchKeyword.getText().toString());
+                            boolean succesfullUpload =  socialMedia.postToSocialNetwork(steganographedBytes, MediaType.valueOf(getUriMimType(fullFileUri).toUpperCase()), enterSearchKeyword.getText().toString());
+
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    progressBar.setVisibility(View.GONE);
+                                    if(succesfullUpload){
+                                        Toast.makeText(getUploadFileActivity(), "Succesfully uploaded", Toast.LENGTH_LONG).show();
+                                    }
+                                    else{
+                                        Toast.makeText(getUploadFileActivity(), "Upload failed", Toast.LENGTH_LONG).show();
+
+                                    }
+
+                                }
+                            });
+
+
+
+
                         }
                     }
                 };
@@ -190,6 +231,10 @@ public class UploadFileActivity extends AppCompatActivity {
         else{
             return "no readable file";
         }
+    }
+
+    public UploadFileActivity getUploadFileActivity(){
+        return this;
     }
 
 }

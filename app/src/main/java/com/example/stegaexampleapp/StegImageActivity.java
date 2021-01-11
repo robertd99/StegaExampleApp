@@ -144,7 +144,7 @@ public class StegImageActivity extends AppCompatActivity {
 
                     //File encodedFile = new File(Environment.getExternalStorageDirectory() , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
                     writeToFile(encodedFile,steganographyArray);
-                    Log.i("writeToFile finished", "filepath: " + encodedFile.getAbsolutePath());
+                    Log.i("StegImageActivity writeToFile finished", "filepath: " + encodedFile.getAbsolutePath());
 
 
                 }
