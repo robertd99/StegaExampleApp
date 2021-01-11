@@ -22,7 +22,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
     TextView redditSearchingONOFF;
     TextView searchResultTextViewReddit;
 
-    List<String> resultMessagesReddit = new ArrayList<>();
+    List<String> allResultMessagesReddit = new ArrayList<>();
     long lastTimeCheckedReddit = 0;
     ImplSocialMediaResults implSocialMediaResults;
 
@@ -74,7 +74,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
     public void setSearchResultMessage(List<String> message, String socialMediaType) {
         if(socialMediaType.equals("reddit")){
             for(String string : message) {
-                resultMessagesReddit.add(string);
+                allResultMessagesReddit.add(string);
             }
         }
         updateResultViewsReddit();
@@ -95,7 +95,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                searchResultTextViewReddit.setText(String.join(", ", resultMessagesReddit) + "\n Last Time Checked: "+ lastTimeCheckedReddit);
+                searchResultTextViewReddit.setText(String.join(", ", allResultMessagesReddit) + "\n Last Time Checked: "+ lastTimeCheckedReddit);
 
 
             }
