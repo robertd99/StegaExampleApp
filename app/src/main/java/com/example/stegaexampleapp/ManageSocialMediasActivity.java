@@ -24,6 +24,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 
     List<String> allResultMessagesReddit = new ArrayList<>();
     long lastTimeCheckedReddit = 0;
+    String lastCheckedKeyword;
     ImplSocialMediaResults implSocialMediaResults;
 
     SocialMedia reddit;
@@ -38,15 +39,19 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 
         implSocialMediaResults = new ImplSocialMediaResults(this);
         reddit = new Reddit();
-        reddit.addAsListener(implSocialMediaResults);
-        //reddit.setLastTimeChecked(JSONPersistentManager.getInstance().getLastTimeCheckedForAPI(APINames.REDDIT));
-        reddit.setLastTimeChecked(0);
         String keyword = "test";
+        reddit.addAsListener(implSocialMediaResults);
+
+        reddit.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
+        //reddit.changeSchedulerPeriod(1);
         reddit.subscribeToKeyword(keyword);
-        JSONPersistentManager.getInstance().addKeywordForAPI(APINames.REDDIT, keyword);
-        reddit.setAllSubscribedKeywords(JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.REDDIT));
-        Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywords()));
-        Log.i("reddit last time checked keywords",String.valueOf(reddit.getLastTimeChecked()));
+        //reddit.setLastTimeCheckedForKeyword(keyword, 1111L);
+        //JSONPersistentManager.getInstance().addKeywordForApi(APINames.REDDIT, keyword);
+        //reddit.setAllSubscribedKeywords(JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.REDDIT));
+
+
+        Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywordsAsList()));
+        Log.i("reddit last time checked keywords",String.valueOf(reddit.getAllSubscribedKeywordsAndLastTimeChecked().toString()));
 
         redditSearchingONOFF = findViewById(R.id.manageSocialMediasRedditSearchingONOFF);
         redditSwitch = findViewById(R.id.manageSocialMediasRedditSwitch);
@@ -71,7 +76,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 
     }
 
-    public void addSearchResultMessages(List<String> message, String socialMediaType) {
+    public void addSearchResultMessages(String socialMediaType, List<String> message) {
         if(socialMediaType.equals("reddit")){
             for(String string : message) {
                 allResultMessagesReddit.add(string);
@@ -80,9 +85,10 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         updateResultViewsReddit();
     }
 
-    public void setLastTimeChecked(long lastTimeChecked, String socialMediaType){
+    public void setLastTimeChecked(String socialMediaType, String keyword, long l){
         if(socialMediaType.equals("reddit")){
-            lastTimeCheckedReddit = lastTimeChecked;
+            lastTimeCheckedReddit = l;
+            lastCheckedKeyword = keyword;
         }
         updateResultViewsReddit();
 
@@ -95,7 +101,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                searchResultTextViewReddit.setText(String.join(", ", allResultMessagesReddit) + "\n Last Time Checked: "+ lastTimeCheckedReddit);
+                searchResultTextViewReddit.setText(String.join(", ", allResultMessagesReddit) + "\n Last Time Checked: "+ lastTimeCheckedReddit+ "\n for keyword: " + lastCheckedKeyword);
 
 
             }

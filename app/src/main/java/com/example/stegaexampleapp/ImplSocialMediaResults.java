@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.htw.berlin.steganography.apis.SocialMedia;
 import de.htw.berlin.steganography.apis.SocialMediaListener;
 import de.htw.berlin.steganography.apis.models.APINames;
 import de.htw.berlin.steganography.persistence.JSONPersistentManager;
@@ -12,10 +13,7 @@ import de.htw.berlin.steganography.persistence.JSONPersistentManager;
 import static java.lang.String.join;
 
 public class ImplSocialMediaResults implements SocialMediaListener {
-    List<String> resultList = new ArrayList<>();
-    long lastTimeChecked;
     ManageSocialMediasActivity activity;
-    String apiname;
 
     public ImplSocialMediaResults(ManageSocialMediasActivity activity){
          this.activity = activity;
@@ -23,25 +21,23 @@ public class ImplSocialMediaResults implements SocialMediaListener {
 
 
     @Override
-    public void updateSocialMediaMessage(List<String> list, String s) {
-        for(String string: list){
-            resultList.add(string);
-        }
-        Log.i("socialMediaListener updateSocialMediaMessage()", "SocialMedia Type: "+ s + " Message: "+ writeMessageToLog());
-        activity.addSearchResultMessages(resultList, s);
+    public void updateSocialMediaMessage(SocialMedia socialMedia, List<String> list) {
+        Log.i("socialMediaListener updateSocialMediaMessage()", "SocialMedia Type: "+ socialMedia.getApiName() + " Message: "+ writeMessageToLog(list));
+        activity.addSearchResultMessages(socialMedia.getApiName(), list);
 
     }
 
-    private String writeMessageToLog() {
-       return String.join(", ", resultList);
-    }
 
     @Override
-    public void updateSocialMediaLastTimeChecked(long l, String s) {
-        lastTimeChecked = l;
-        activity.setLastTimeChecked(l,s);
-        Log.i("socialMediaListener updateSocialMediaLastTimeChecked()", "SocialMedia Type: "+ s + " lastTimeChecked: "+String.valueOf(l));
-        JSONPersistentManager.getInstance().setLastTimeCheckedForAPI(APINames.valueOf(s.toUpperCase()),lastTimeChecked);
+    public void updateSocialMediaLastTimeChecked(SocialMedia socialMedia, String keyword, long l) {
+        activity.setLastTimeChecked(socialMedia.getApiName(), keyword, l);
+        Log.i("socialMediaListener updateSocialMediaLastTimeChecked()", "SocialMedia Type: "+ socialMedia.getApiName() + " lastTimeChecked: "+String.valueOf(l));
+        JSONPersistentManager.getInstance().setLastTimeCheckedForKeywordForAPI(APINames.valueOf(socialMedia.getApiName().toUpperCase()), keyword, l);
+    }
+
+
+    private String writeMessageToLog(List<String> resultList) {
+        return String.join(", ", resultList);
     }
 
 

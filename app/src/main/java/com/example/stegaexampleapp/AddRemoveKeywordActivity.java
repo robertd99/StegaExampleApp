@@ -40,7 +40,7 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
             socialMedia = new Imgur();
         }
         try {
-            socialMedia.setAllSubscribedKeywords(JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.valueOf(selectedNetworkString.toUpperCase())));
+            socialMedia.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.valueOf(selectedNetworkString.toUpperCase())));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,7 +49,7 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
         selectedSocialMedia.setText(selectedNetworkString);
         currentSubscribedKeywords = (TextView) findViewById(R.id.showCurrentSubscribedKeywordsId);
 
-        currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
+        currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywordsAsList()));
 
         writtenKeyword = (EditText) findViewById(R.id.addKeywordId);
 
@@ -60,9 +60,9 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
 
                 try {
                     String keyword = writtenKeyword.getText().toString();
-                    JSONPersistentManager.getInstance().addKeywordForAPI(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
+                    JSONPersistentManager.getInstance().addKeywordForApi(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
                     socialMedia.subscribeToKeyword(keyword);
-                    currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
+                    currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywordsAsList()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -78,7 +78,7 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
                 String keyword = writtenKeyword.getText().toString();
                 JSONPersistentManager.getInstance().removeKeywordForAPI(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
                 socialMedia.unsubscribeKeyword(keyword);
-                currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
+                currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywordsAsList()));
 
             }
         });

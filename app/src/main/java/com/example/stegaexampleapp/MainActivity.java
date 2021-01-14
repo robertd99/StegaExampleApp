@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.htw.berlin.steganography.persistence.JSONPersistentWriter;
 import de.htw.berlin.steganography.persistence.JSONPersistentManager;
 
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         JSONPersistentManager.getInstance().setJsonPersistentHelper(new JSONPersistentWriter(this));
 
         Log.i("Android SDK", String.valueOf(Build.VERSION.SDK_INT));
+        Map<String, Long> myMap = new HashMap<>();
+        myMap.put("hi", new Long(0));
 
         uploadToButton = (Button) findViewById(R.id.stegImageId);
         uploadToButton.setOnClickListener(new View.OnClickListener() {
