@@ -48,7 +48,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         //reddit.setLastTimeCheckedForKeyword(keyword, 1111L);
         //JSONPersistentManager.getInstance().addKeywordForApi(APINames.REDDIT, keyword);
         //reddit.setAllSubscribedKeywords(JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.REDDIT));
-
+        //reddit.startSearch();
 
         Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywordsAsList()));
         Log.i("reddit last time checked keywords",String.valueOf(reddit.getAllSubscribedKeywordsAndLastTimeChecked().toString()));
