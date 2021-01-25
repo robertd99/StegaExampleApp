@@ -145,8 +145,8 @@ public class StegImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (getUriMimType(rawFileUri)!= null) {
-
-                    File encodedFile = new File(getBaseContext().getExternalFilesDir(null) , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
+                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File encodedFile = new File(dir + File.separator + fileName.getText().toString()+"."+getUriMimType(rawFileUri));
 
                     //File encodedFile = new File(Environment.getExternalStorageDirectory() , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
                     boolean savedFile = writeToFile(encodedFile,steganographyArray);
@@ -293,8 +293,8 @@ public class StegImageActivity extends AppCompatActivity {
             }
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(bytes);
-            fos.close();
             fos.flush();
+            fos.close();
             return true;
         } catch (Exception e) {
             e.getMessage();
