@@ -39,6 +39,7 @@ import de.htw.berlin.steganography.steganography.exceptions.MediaReassemblingExc
 import de.htw.berlin.steganography.steganography.exceptions.UnknownStegFormatException;
 import de.htw.berlin.steganography.steganography.exceptions.UnsupportedMediaTypeException;
 import de.htw.berlin.steganography.steganography.image.ImageSteg;
+import de.htw.berlin.steganography.steganography.image.exceptions.BitmapInaccuracyException;
 
 public class UploadFileActivity extends AppCompatActivity {
 
@@ -149,6 +150,8 @@ public class UploadFileActivity extends AppCompatActivity {
                                 catch (MediaReassemblingException e) {
                                     e.printStackTrace();
                                 } catch (MediaCapacityException e) {
+                                    e.printStackTrace();
+                                } catch (BitmapInaccuracyException e) {
                                     e.printStackTrace();
                                 }
                             }

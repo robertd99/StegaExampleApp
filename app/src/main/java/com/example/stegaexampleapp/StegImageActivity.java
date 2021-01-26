@@ -32,6 +32,7 @@ import de.htw.berlin.steganography.steganography.exceptions.MediaReassemblingExc
 import de.htw.berlin.steganography.steganography.exceptions.UnknownStegFormatException;
 import de.htw.berlin.steganography.steganography.exceptions.UnsupportedMediaTypeException;
 import de.htw.berlin.steganography.steganography.image.ImageSteg;
+import de.htw.berlin.steganography.steganography.image.exceptions.BitmapInaccuracyException;
 import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.stegaexampleapp.UploadFileActivity.REQUEST_IMAGE_GET;
@@ -194,6 +195,8 @@ public class StegImageActivity extends AppCompatActivity {
         } catch (MediaCapacityException e) {
             e.printStackTrace();
         } catch (MediaReassemblingException e) {
+            e.printStackTrace();
+        } catch (BitmapInaccuracyException e) {
             e.printStackTrace();
         }
         return null;

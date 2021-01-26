@@ -33,6 +33,15 @@
         />
 
     <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgurOnOff"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Results:" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/manageSocialMediasResultTextViewReddit"
@@ -57,8 +66,32 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="400dp"/>
 
+    <TextView
+        android:id="@+id/imgurOnOff"
+        android:layout_width="101dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/manageSocialMediasImgurSwitch"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="460dp"
+        android:layout_marginEnd="155dp"
+        android:text="TextView" />
 
-
+    <TextView
+        android:id="@+id/imgurResult"
+        android:layout_width="111dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="184dp"
+        android:text="TextView" />
 
 
 </RelativeLayout>
