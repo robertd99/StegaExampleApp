@@ -118,12 +118,17 @@ public class StegImageActivity extends AppCompatActivity {
         computeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                steganographyArray =  computeSteganographyArrayFromByteArray(getUriMimType(rawFileUri), getBytesFromUri(rawFileUri), messageEditText.getText().toString().getBytes());
-                if(getUriMimType(rawFileUri).equals("png")) {
-                    setImageViewFromByteArray(steganographyArray, encodedImageView);
-                }
-                if(getUriMimType(rawFileUri).equals("gif")) {
-                    setImageViewFromByteArray(steganographyArray, encodedGifImageView);
+                try {
+                    steganographyArray =  computeSteganographyArrayFromByteArray(getUriMimType(rawFileUri), getBytesFromUri(rawFileUri), messageEditText.getText().toString().getBytes());
+                    if(getUriMimType(rawFileUri).equals("png")) {
+                        setImageViewFromByteArray(steganographyArray, encodedImageView);
+                    }
+                    if(getUriMimType(rawFileUri).equals("gif")) {
+                        setImageViewFromByteArray(steganographyArray, encodedGifImageView);
+                    }
+                } catch (BitmapInaccuracyException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getStegImageActivity(), "This image will not work due to Bitmap inaccuracies", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -177,7 +182,7 @@ public class StegImageActivity extends AppCompatActivity {
         imageView.setImageBitmap(bmp);
     }
 
-    private byte[] computeSteganographyArrayFromByteArray(String mimeType, byte[] inputData, byte[] message) {
+    private byte[] computeSteganographyArrayFromByteArray(String mimeType, byte[] inputData, byte[] message) throws BitmapInaccuracyException {
         try {
             if(mimeType.equals("png")) {
                 Log.i("no stegano img size", String.valueOf(inputData.length));
@@ -195,8 +200,6 @@ public class StegImageActivity extends AppCompatActivity {
         } catch (MediaCapacityException e) {
             e.printStackTrace();
         } catch (MediaReassemblingException e) {
-            e.printStackTrace();
-        } catch (BitmapInaccuracyException e) {
             e.printStackTrace();
         }
         return null;
