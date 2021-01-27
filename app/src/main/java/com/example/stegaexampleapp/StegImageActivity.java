@@ -299,7 +299,6 @@ public class StegImageActivity extends AppCompatActivity {
             }
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(bytes);
-            fos.flush();
             fos.close();
             return true;
         } catch (Exception e) {
