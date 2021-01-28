@@ -189,6 +189,7 @@ public class StegImageActivity extends AppCompatActivity {
 
                 Steganography steganography = new ImageSteg();
                 return steganography.encode(inputData, message);
+
             }
 
         } catch (IOException e) {
@@ -200,8 +201,6 @@ public class StegImageActivity extends AppCompatActivity {
         } catch (MediaCapacityException e) {
             e.printStackTrace();
         } catch (MediaReassemblingException e) {
-            e.printStackTrace();
-        } catch (BitmapInaccuracyException e) {
             e.printStackTrace();
         }
         return null;

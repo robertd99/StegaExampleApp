@@ -14,15 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htw.berlin.steganography.apis.SocialMedia;
-<<<<<<< Updated upstream
+
 import de.htw.berlin.steganography.apis.imgur.Imgur;
-=======
-<<<<<<< HEAD
+
 import de.htw.berlin.steganography.apis.SocialMediaModel;
-=======
-import de.htw.berlin.steganography.apis.imgur.Imgur;
->>>>>>> 78fdf4017bea1225cf03d1e1fb2428f773737ce1
->>>>>>> Stashed changes
+
 import de.htw.berlin.steganography.apis.models.APINames;
 import de.htw.berlin.steganography.apis.reddit.Reddit;
 import de.htw.berlin.steganography.persistence.JSONPersistentManager;
@@ -49,55 +45,51 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_social_medias);
         implSocialMediaResults = new ImplSocialMediaResults(this);
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
+
         reddit = new Reddit(new SocialMediaModel());
-        String keyword = "test";
         reddit.addAsListener(implSocialMediaResults);
-
-        reddit.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
-        //reddit.changeSchedulerPeriod(1);
-        reddit.subscribeToKeyword(keyword);
-        reddit.subscribeToKeyword("hallo");
-
-        reddit.getLastTimeCheckedForKeyword("hallo");
-        reddit.changeSchedulerPeriod(1);
-        //reddit.setLastTimeCheckedForKeyword(keyword, 1111L);
-        //JSONPersistentManager.getInstance().addKeywordForApi(APINames.REDDIT, keyword);
-        //reddit.setAllSubscribedKeywords(JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.REDDIT));
-        //reddit.startSearch();
-
-        reddit.setLastTimeCheckedForKeyword("test",0L);
-
-        Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywordsAsList()));
-        Log.i("reddit last time checked keywords",String.valueOf(reddit.getAllSubscribedKeywordsAndLastTimeChecked().toString()));
-=======
->>>>>>> 78fdf4017bea1225cf03d1e1fb2428f773737ce1
->>>>>>> Stashed changes
-
-        reddit = new Reddit();
         redditSearchingONOFF = findViewById(R.id.manageSocialMediasRedditSearchingONOFF);
         redditSwitch = findViewById(R.id.manageSocialMediasRedditSwitch);
         searchResultTextViewReddit = (TextView) findViewById(R.id.manageSocialMediasResultTextViewReddit);
-        initializeSocialMedia(reddit, redditSwitch, redditSearchingONOFF, searchResultTextViewReddit);
+        initializeSocialMedia(reddit,redditSwitch,redditSearchingONOFF,searchResultTextViewReddit);
 
-        imgur = new Imgur();
+        Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywordsAsList()));
+        Log.i("reddit last time checked keywords",String.valueOf(reddit.getAllSubscribedKeywordsAndLastTimeChecked().toString()));
+
+
+        imgur = new Imgur(new SocialMediaModel());
         imgurOnOff = findViewById(R.id.imgurOnOff);
         imgurSwitch = findViewById(R.id.manageSocialMediasImgurSwitch);
         imgurResult = findViewById(R.id.imgurResult);
-        initializeSocialMedia(imgur, imgurSwitch, imgurOnOff, imgurResult);
+
+
+
+
+
+        //reddit.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
+        reddit.changeSchedulerPeriod(1);
+
+        reddit.subscribeToKeyword("test");
+        reddit.setLastTimeCheckedForKeyword("test",20L);
+
+
+
+        Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywordsAsList()));
+        Log.i("reddit last time checked keywords",String.valueOf(reddit.getAllSubscribedKeywordsAndLastTimeChecked().toString()));
+
+
+
     }
 
-    public void initializeSocialMedia(SocialMedia socialMedia, Switch zwitch, TextView tvOnOff, TextView tvResult) {
-        Log.i("Init", socialMedia.getApiName() + " gets initialized... ");
+   public void initializeSocialMedia(SocialMedia socialMedia, Switch zwitch, TextView tvOnOff, TextView tvResult) {
+      /*  Log.i("Init", socialMedia.getApiName() + " gets initialized... ");
 
         socialMedia.addAsListener(implSocialMediaResults);
         socialMedia.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
         socialMedia.subscribeToKeyword("na");
         socialMedia.getLastTimeCheckedForKeyword("na");
         socialMedia.changeSchedulerPeriod(1);
-
+*/
         zwitch.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 socialMedia.startSearch();
