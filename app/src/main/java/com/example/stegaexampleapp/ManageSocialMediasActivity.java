@@ -66,11 +66,12 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 
 
 
-        //reddit.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
         reddit.changeSchedulerPeriod(1);
 
         reddit.subscribeToKeyword("test");
         reddit.setLastTimeCheckedForKeyword("test",20L);
+        reddit.subscribeToKeyword("auto");
+        reddit.setLastTimeCheckedForKeyword("auto",400L);
 
 
 
