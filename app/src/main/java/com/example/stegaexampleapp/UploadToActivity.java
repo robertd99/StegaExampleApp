@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htw.berlin.steganography.apis.SocialMedia;
+import de.htw.berlin.steganography.apis.SocialMediaModel;
 import de.htw.berlin.steganography.apis.imgur.Imgur;
 import de.htw.berlin.steganography.apis.reddit.Reddit;
 import de.htw.berlin.steganography.OAuthMainActivity;
@@ -27,7 +28,9 @@ public class UploadToActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_to);
-        Reddit reddit = new Reddit();
+        SocialMediaModel socialMediaModelReddit = new SocialMediaModel();
+        SocialMediaModel socialMediaModelImgur = new SocialMediaModel();
+        Reddit reddit = new Reddit(socialMediaModelReddit);
 
         AccountManager am = AccountManager.get(this);
         Account[] accounts = am.getAccountsByType("com.reddit");
@@ -36,8 +39,8 @@ public class UploadToActivity extends AppCompatActivity {
 
 
 
-        socialMediaList.add(new Reddit());
-        socialMediaList.add(new Imgur());
+        socialMediaList.add(new Reddit(socialMediaModelReddit));
+        socialMediaList.add(new Imgur(socialMediaModelImgur));
         Log.i("Redditname", String.valueOf(reddit.getApiName()));
         redditButton = (Button) findViewById(R.id.uploadToRedditId);
         redditButton.setOnClickListener(new View.OnClickListener() {

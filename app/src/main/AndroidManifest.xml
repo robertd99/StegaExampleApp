@@ -21,8 +21,6 @@
         tools:replace="android:theme">
         <activity android:name=".StegImageActivity"></activity>
         <activity android:name=".AddRemoveKeywordActivity" />
-        <activity android:name=".FileUploadedTestActivity" />
-        <activity android:name=".ConfigureUploadFile" />
         <activity android:name=".UploadFileActivity" />
         <activity android:name=".ManageSocialMediasActivity" />
         <activity android:name=".SubscribeToActivity" />

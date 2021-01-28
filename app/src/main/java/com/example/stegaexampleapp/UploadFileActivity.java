@@ -127,10 +127,10 @@ public class UploadFileActivity extends AppCompatActivity {
 
                             SocialMedia socialMedia = null;
                             if(selectedNetworkString.equals("reddit")) {
-                                socialMedia = new Reddit();
+                                socialMedia = new Reddit(null);
                             }
                             if(selectedNetworkString.equals("imgur")){
-                                socialMedia = new Imgur();
+                                socialMedia = new Imgur(null);
                             }
                             socialMedia.setToken(new Token(accesToken, 999999999));
 
@@ -140,6 +140,25 @@ public class UploadFileActivity extends AppCompatActivity {
                                 try {
                                     steganographedBytes = imageSteg.encode(steganographyArray, enterMessage.getText().toString().getBytes());
                                     Log.i("steganographedBytes size", String.valueOf(steganographedBytes.length));
+                                    Log.i("UploadFile bytes", String.valueOf(steganographedBytes.length));
+                                    boolean succesfullUpload =  socialMedia.postToSocialNetwork(steganographedBytes, MediaType.valueOf(getUriMimType(fullFileUri).toUpperCase()), enterSearchKeyword.getText().toString());
+
+                                    runOnUiThread(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+
+                                            progressBar.setVisibility(View.GONE);
+                                            if(succesfullUpload){
+                                                Toast.makeText(getUploadFileActivity(), "Succesfully uploaded", Toast.LENGTH_LONG).show();
+                                            }
+                                            else{
+                                                Toast.makeText(getUploadFileActivity(), "Upload failed", Toast.LENGTH_LONG).show();
+
+                                            }
+
+                                        }
+                                    });
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 } catch (MediaNotFoundException e) {
@@ -155,25 +174,7 @@ public class UploadFileActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-                            Log.i("UploadFile bytes", String.valueOf(steganographedBytes.length));
-                            boolean succesfullUpload =  socialMedia.postToSocialNetwork(steganographedBytes, MediaType.valueOf(getUriMimType(fullFileUri).toUpperCase()), enterSearchKeyword.getText().toString());
 
-                            runOnUiThread(new Runnable() {
-
-                                @Override
-                                public void run() {
-
-                                    progressBar.setVisibility(View.GONE);
-                                    if(succesfullUpload){
-                                        Toast.makeText(getUploadFileActivity(), "Succesfully uploaded", Toast.LENGTH_LONG).show();
-                                    }
-                                    else{
-                                        Toast.makeText(getUploadFileActivity(), "Upload failed", Toast.LENGTH_LONG).show();
-
-                                    }
-
-                                }
-                            });
 
 
 

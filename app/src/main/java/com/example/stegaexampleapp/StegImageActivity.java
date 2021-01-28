@@ -201,6 +201,8 @@ public class StegImageActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (MediaReassemblingException e) {
             e.printStackTrace();
+        } catch (BitmapInaccuracyException e) {
+            e.printStackTrace();
         }
         return null;
     }

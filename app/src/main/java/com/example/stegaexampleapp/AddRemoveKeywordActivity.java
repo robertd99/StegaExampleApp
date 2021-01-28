@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.htw.berlin.steganography.apis.SocialMedia;
+import de.htw.berlin.steganography.apis.SocialMediaModel;
 import de.htw.berlin.steganography.apis.imgur.Imgur;
 import de.htw.berlin.steganography.apis.models.APINames;
 import de.htw.berlin.steganography.apis.reddit.Reddit;
@@ -34,10 +35,10 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
 
         selectedNetworkString = getIntent().getStringExtra("selectedNetwork");
         if(selectedNetworkString.equals("reddit")){
-            socialMedia = new Reddit();
+            socialMedia = new Reddit(new SocialMediaModel());
         }
         if(selectedNetworkString.equals("imgur")){
-            socialMedia = new Imgur();
+            socialMedia = new Imgur(new SocialMediaModel());
         }
         try {
             socialMedia.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.valueOf(selectedNetworkString.toUpperCase())));
