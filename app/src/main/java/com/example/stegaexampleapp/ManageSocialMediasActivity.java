@@ -61,6 +61,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         imgurOnOff = findViewById(R.id.imgurOnOff);
         imgurSwitch = findViewById(R.id.manageSocialMediasImgurSwitch);
         imgurResult = findViewById(R.id.imgurResult);
+        initializeSocialMedia(imgur, imgurSwitch, imgurOnOff, imgurResult);
 
 
 
