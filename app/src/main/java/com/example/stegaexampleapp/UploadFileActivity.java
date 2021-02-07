@@ -60,16 +60,14 @@ public class UploadFileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.oauth_activity_main);
         setContentView(R.layout.activity_upload_file);
-
         scrollView = findViewById(R.id.uploadFileScrollView);
+
 
         progressBar = findViewById(R.id.uploadFileProgressBar);
         progressBar.setVisibility(View.GONE);
 
         selectedNetworkString = getIntent().getStringExtra("selectedNetwork");
-
         accesToken = getIntent().getStringExtra("accesToken");
 
         Log.i("UploadFile accesToken:",accesToken);
@@ -80,11 +78,8 @@ public class UploadFileActivity extends AppCompatActivity {
         Log.i("UploadFileActvity selectedNetowrk", selectedNetworkString);
 
         imageView = (ImageView) findViewById(R.id.uploadFileImageId);
-
         enterMessage = (EditText) findViewById(R.id.uploadFileEnterMessageEditTextId);
-
         enterSearchKeyword = (EditText) findViewById(R.id.uploadFileEnterSearchKeywordEditTextId);
-
         choseFileUploadButton = (Button) findViewById(R.id.uploadFileChoseFileButtonId);
         choseFileUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override

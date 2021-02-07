@@ -23,25 +23,13 @@ public class UploadToActivity extends AppCompatActivity {
     private Button redditButton;
     private Button imgurButton;
 
-    private List<SocialMedia> socialMediaList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_to);
-        SocialMediaModel socialMediaModelReddit = new SocialMediaModel();
-        SocialMediaModel socialMediaModelImgur = new SocialMediaModel();
-        Reddit reddit = new Reddit(socialMediaModelReddit);
 
-        AccountManager am = AccountManager.get(this);
-        Account[] accounts = am.getAccountsByType("com.reddit");
-        Log.i("halloAccounts","hall accounts");
-        Log.i("accounts",String.valueOf(accounts.length));
-
-
-
-        socialMediaList.add(new Reddit(socialMediaModelReddit));
-        socialMediaList.add(new Imgur(socialMediaModelImgur));
-        Log.i("Redditname", String.valueOf(reddit.getApiName()));
+        //calls openOAuthActivity with "reddit" and "com.example.stegaexampleapp.UploadFileActivity"
         redditButton = (Button) findViewById(R.id.uploadToRedditId);
         redditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +38,7 @@ public class UploadToActivity extends AppCompatActivity {
 
             }
         });
-
+        //calls openOAuthActivity with "imgur" and "com.example.stegaexampleapp.UploadFileActivity"
         imgurButton = (Button) findViewById(R.id.uploadToImgurId);
         imgurButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +51,10 @@ public class UploadToActivity extends AppCompatActivity {
 
     }
 
+    //calls OAuthMainActivity out of the Steganography AAR for the network, reflective access actvitiyToCall so the
+    //OAuthMainActivity knows which activity to start after successfull OAuth2 Flow.
+    //The AccesToken will be send as an Extra under the Key "accesToken".
+    //The Network name it was called for under the Extra Key "selectedNetwork"
     private void openOAuthView(String network, String activityToCall) {
         Intent intent = new Intent(this, OAuthMainActivity.class);
         intent.putExtra("selectedNetwork",network);
@@ -70,8 +62,4 @@ public class UploadToActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void openUploadFileActivity() {
-        Intent intent = new Intent(this, UploadFileActivity.class);
-        startActivity(intent);
-    }
 }

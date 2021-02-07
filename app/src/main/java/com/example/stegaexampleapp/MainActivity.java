@@ -17,23 +17,32 @@ import de.htw.berlin.steganography.persistence.JSONPersistentWriter;
 import de.htw.berlin.steganography.persistence.JSONPersistentManager;
 
 public class MainActivity extends AppCompatActivity {
+    //opens Activity to choose to which SocialMedia to Upload to
     private Button uploadToButton;
+
+    //opens Activity to choose for which SocialMedia you want to add/remove keywords
     private Button subscribeToButton;
+
+    //opens activity to manage both SocialMedias
     private Button manageSocialMediasButton;
+
+    //opens activity to encode/decode/save Files
     private Button stegImageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //sets JSONPersistentManagerHelper to access App Intern File Storage
         JSONPersistentManager.getInstance().setJsonPersistentHelper(new JSONPersistentWriter(this));
 
+        //jsut to check which SDK is running on the System since it impacts how the App works quite alot
         Log.i("Android SDK", String.valueOf(Build.VERSION.SDK_INT));
-        Map<String, Long> myMap = new HashMap<>();
-        myMap.put("hi", new Long(0));
 
-        uploadToButton = (Button) findViewById(R.id.stegImageId);
-        uploadToButton.setOnClickListener(new View.OnClickListener() {
+
+        stegImageButton = (Button) findViewById(R.id.stegImageId);
+        stegImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openStegImageActivity();

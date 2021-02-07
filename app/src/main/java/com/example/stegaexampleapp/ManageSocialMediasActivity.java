@@ -46,7 +46,12 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manage_social_medias);
         implSocialMediaResults = new ImplSocialMediaResults(this);
 
+        //sets a new emtpy SocialMediaModel, if you have keywords and lastTimChecked save you can either
+        //set them via the SocialMediaModel itself or via the SocialMedia Controller
         reddit = new Reddit(new SocialMediaModel());
+
+        //adds implSocialMediaResults as Listener. implSocialMediaResults will get updated on
+        //the decoded Messages and when a lastTimeChecked for a specific keyword has changed
         reddit.addAsListener(implSocialMediaResults);
         redditSearchingONOFF = findViewById(R.id.manageSocialMediasRedditSearchingONOFF);
         redditSwitch = findViewById(R.id.manageSocialMediasRedditSwitch);
@@ -66,13 +71,16 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 
 
 
-
+        //scheduler period set to 1 minute. Reddit will search for new results every minute.
         reddit.changeSchedulerPeriod(1);
 
+        //adds new keyword "test" to the SocialMediaModel of reddit. "test" will be initilised with lastTimeChecked 0
         reddit.subscribeToKeyword("test");
+
+        //changes lastTimeChecked of"test" to 20
         reddit.setLastTimeCheckedForKeyword("test",20L);
-        reddit.subscribeToKeyword("auto");
-        reddit.setLastTimeCheckedForKeyword("auto",400L);
+        reddit.subscribeToKeyword("zero");
+        reddit.setLastTimeCheckedForKeyword("zero",400L);
 
 
 
@@ -94,15 +102,18 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 */
         zwitch.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
+                //stars the search for specified SocialMedia
                 socialMedia.startSearch();
                 tvOnOff.setText("Searching: ON");
             } else {
+                //stops the search for specified SocialMedia
                 socialMedia.stopSearch();
                 tvOnOff.setText("Searching: OFF");
             }
         });
     }
 
+    //method to change View, adds message to Result String on View
     public void addSearchResultMessages(String socialMediaType, List<String> message) {
         for (String string : message) {
             if (socialMediaType.equals("reddit")) {
@@ -119,6 +130,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         }
     }
 
+    //method to change View, changes lastTimeChecked for keyword in View
     public void setLastTimeChecked(String socialMediaType, String keyword, long l) {
         lastCheckedKeyword = keyword;
 
