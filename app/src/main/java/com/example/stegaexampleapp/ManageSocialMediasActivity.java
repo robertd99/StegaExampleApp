@@ -24,12 +24,15 @@ import de.htw.berlin.steganography.apis.reddit.Reddit;
 import de.htw.berlin.steganography.persistence.JSONPersistentManager;
 
 public class ManageSocialMediasActivity extends AppCompatActivity {
-
+    //switches for turning SocialMedia search on and off
     Switch redditSwitch, imgurSwitch;
+    //textview taht displays either ON or OFF depending on search status
     TextView redditSearchingONOFF, imgurOnOff;
+    //results that displays found messages and lastTimeChecked for keyword
     TextView searchResultTextViewReddit, imgurResult;
-
+    //contains all messages found for reddit
     List<String> allResultMessagesReddit = new ArrayList<>();
+    //contains all messages found for imgur
     List<String> allResultMessagesImgur = new ArrayList<>();
 
     long lastTimeCheckedReddit = 0;
@@ -82,6 +85,9 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         reddit.subscribeToKeyword("zero");
         reddit.setLastTimeCheckedForKeyword("zero",400L);
 
+        //puts reddits SocialMediaModel
+        reddit.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
+
 
 
         Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywordsAsList()));
@@ -92,14 +98,7 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
     }
 
    public void initializeSocialMedia(SocialMedia socialMedia, Switch zwitch, TextView tvOnOff, TextView tvResult) {
-      /*  Log.i("Init", socialMedia.getApiName() + " gets initialized... ");
-
-        socialMedia.addAsListener(implSocialMediaResults);
-        socialMedia.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
-        socialMedia.subscribeToKeyword("na");
-        socialMedia.getLastTimeCheckedForKeyword("na");
-        socialMedia.changeSchedulerPeriod(1);
-*/
+        //setting switches
         zwitch.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 //stars the search for specified SocialMedia

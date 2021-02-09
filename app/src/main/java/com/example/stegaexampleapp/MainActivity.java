@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //sets JSONPersistentManagerHelper to access App Intern File Storage
+        //sets JSONPersistentManagerHelper to access App Intern File Storage, if that is not done at the Start calling Functions will cause Excptions
         JSONPersistentManager.getInstance().setJsonPersistentHelper(new JSONPersistentWriter(this));
 
         //jsut to check which SDK is running on the System since it impacts how the App works quite alot
