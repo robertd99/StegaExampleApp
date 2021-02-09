@@ -154,8 +154,6 @@ public class UploadFileActivity extends AppCompatActivity {
 
                                         }
                                     });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 } catch (MediaNotFoundException e) {
                                     e.printStackTrace();
                                 } catch (UnsupportedMediaTypeException e) {

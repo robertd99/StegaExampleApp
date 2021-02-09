@@ -95,8 +95,6 @@ public class StegImageActivity extends AppCompatActivity {
                         byte[] decodedResult = imageSteg.decode(steganographyArray);
                         decodedTextView.setText(new String(decodedResult));
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (MediaNotFoundException e) {
                     e.printStackTrace();
                 } catch (UnsupportedMediaTypeException e) {
@@ -192,8 +190,6 @@ public class StegImageActivity extends AppCompatActivity {
 
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (MediaNotFoundException e) {
             e.printStackTrace();
         } catch (UnsupportedMediaTypeException e) {
