@@ -8,8 +8,9 @@ import android.view.View;
 import android.widget.Button;
 
 public class SubscribeToActivity extends AppCompatActivity {
-
+    //calls AddRemoveKeywordActivity with "selectedNetwork" Extra with "reddit"
     Button redditBtn;
+    //calls AddRemoveKeywordActivity with "selectedNetwork" Extra with "imgur"
     Button imgurBtn;
 
     @Override

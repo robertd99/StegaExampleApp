@@ -32,6 +32,7 @@ import de.htw.berlin.steganography.steganography.exceptions.MediaReassemblingExc
 import de.htw.berlin.steganography.steganography.exceptions.UnknownStegFormatException;
 import de.htw.berlin.steganography.steganography.exceptions.UnsupportedMediaTypeException;
 import de.htw.berlin.steganography.steganography.image.ImageSteg;
+import de.htw.berlin.steganography.steganography.image.exceptions.BitmapInaccuracyException;
 import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.stegaexampleapp.UploadFileActivity.REQUEST_IMAGE_GET;
@@ -94,8 +95,6 @@ public class StegImageActivity extends AppCompatActivity {
                         byte[] decodedResult = imageSteg.decode(steganographyArray);
                         decodedTextView.setText(new String(decodedResult));
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (MediaNotFoundException e) {
                     e.printStackTrace();
                 } catch (UnsupportedMediaTypeException e) {
@@ -117,12 +116,17 @@ public class StegImageActivity extends AppCompatActivity {
         computeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                steganographyArray =  computeSteganographyArrayFromByteArray(getUriMimType(rawFileUri), getBytesFromUri(rawFileUri), messageEditText.getText().toString().getBytes());
-                if(getUriMimType(rawFileUri).equals("png")) {
-                    setImageViewFromByteArray(steganographyArray, encodedImageView);
-                }
-                if(getUriMimType(rawFileUri).equals("gif")) {
-                    setImageViewFromByteArray(steganographyArray, encodedGifImageView);
+                try {
+                    steganographyArray =  computeSteganographyArrayFromByteArray(getUriMimType(rawFileUri), getBytesFromUri(rawFileUri), messageEditText.getText().toString().getBytes());
+                    if(getUriMimType(rawFileUri).equals("png")) {
+                        setImageViewFromByteArray(steganographyArray, encodedImageView);
+                    }
+                    if(getUriMimType(rawFileUri).equals("gif")) {
+                        setImageViewFromByteArray(steganographyArray, encodedGifImageView);
+                    }
+                } catch (BitmapInaccuracyException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getStegImageActivity(), "This image will not work due to Bitmap inaccuracies", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -145,8 +149,8 @@ public class StegImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (getUriMimType(rawFileUri)!= null) {
-
-                    File encodedFile = new File(getBaseContext().getExternalFilesDir(null) , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
+                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File encodedFile = new File(dir + File.separator + fileName.getText().toString()+"."+getUriMimType(rawFileUri));
 
                     //File encodedFile = new File(Environment.getExternalStorageDirectory() , fileName.getText().toString()+"."+getUriMimType(rawFileUri) );
                     boolean savedFile = writeToFile(encodedFile,steganographyArray);
@@ -176,17 +180,16 @@ public class StegImageActivity extends AppCompatActivity {
         imageView.setImageBitmap(bmp);
     }
 
-    private byte[] computeSteganographyArrayFromByteArray(String mimeType, byte[] inputData, byte[] message) {
+    private byte[] computeSteganographyArrayFromByteArray(String mimeType, byte[] inputData, byte[] message) throws BitmapInaccuracyException {
         try {
             if(mimeType.equals("png")) {
                 Log.i("no stegano img size", String.valueOf(inputData.length));
 
                 Steganography steganography = new ImageSteg();
                 return steganography.encode(inputData, message);
+
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (MediaNotFoundException e) {
             e.printStackTrace();
         } catch (UnsupportedMediaTypeException e) {
@@ -294,7 +297,6 @@ public class StegImageActivity extends AppCompatActivity {
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(bytes);
             fos.close();
-            fos.flush();
             return true;
         } catch (Exception e) {
             e.getMessage();

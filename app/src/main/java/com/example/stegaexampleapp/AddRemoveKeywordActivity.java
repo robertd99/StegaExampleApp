@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.htw.berlin.steganography.apis.SocialMedia;
+import de.htw.berlin.steganography.apis.SocialMediaModel;
 import de.htw.berlin.steganography.apis.imgur.Imgur;
 import de.htw.berlin.steganography.apis.models.APINames;
 import de.htw.berlin.steganography.apis.reddit.Reddit;
@@ -31,28 +32,25 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_remove_keyword);
 
-
+        //retrieves the selectedNetwork to decide for which SocialMedia to call this Activity
         selectedNetworkString = getIntent().getStringExtra("selectedNetwork");
         if(selectedNetworkString.equals("reddit")){
-            socialMedia = new Reddit();
+            socialMedia = new Reddit(new SocialMediaModel());
         }
         if(selectedNetworkString.equals("imgur")){
-            socialMedia = new Imgur();
+            socialMedia = new Imgur(new SocialMediaModel());
         }
-        try {
-            socialMedia.setAllSubscribedKeywords(JSONPersistentManager.getInstance().getKeywordListForAPI(APINames.valueOf(selectedNetworkString.toUpperCase())));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //retrieves entire Map saved in JSONPersistentManager and puts it into the SocialMediaModel via SocialMedia Controller
+        socialMedia.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.valueOf(selectedNetworkString.toUpperCase())));
 
+
+        //display of selectedNetwork name
         selectedSocialMedia = (TextView) findViewById(R.id.subscribeSocialMediaTypeId);
         selectedSocialMedia.setText(selectedNetworkString);
+        //display of subscirbed Keywords
         currentSubscribedKeywords = (TextView) findViewById(R.id.showCurrentSubscribedKeywordsId);
-
-        currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
-
+        currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywordsAsList()));
         writtenKeyword = (EditText) findViewById(R.id.addKeywordId);
-
         addKeywordBtn = (Button) findViewById(R.id.addKeywordButtonId);
         addKeywordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +58,16 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
 
                 try {
                     String keyword = writtenKeyword.getText().toString();
-                    JSONPersistentManager.getInstance().addKeywordForAPI(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
+                    //scubscirbing a new Keyword to a SocialMedia
                     socialMedia.subscribeToKeyword(keyword);
-                    currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
+                    //subsciribing the keyword to a instance of SocialMedia doesn't persist the Keyword
+                    //thats why, if you want to persist it, have to call the JSONPersistentManager seperately with the
+                    //same keyword (improvement of AAR would be to set a flag or set a JSONPersisentManager in construcotr of
+                    //SocialMedia to do that automatically)
+                    JSONPersistentManager.getInstance().addKeywordForApi(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
+
+
+                    currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywordsAsList()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -78,7 +83,7 @@ public class AddRemoveKeywordActivity extends AppCompatActivity {
                 String keyword = writtenKeyword.getText().toString();
                 JSONPersistentManager.getInstance().removeKeywordForAPI(APINames.valueOf(selectedNetworkString.toUpperCase()),keyword);
                 socialMedia.unsubscribeKeyword(keyword);
-                currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywords()));
+                currentSubscribedKeywords.setText(listToString(socialMedia.getAllSubscribedKeywordsAsList()));
 
             }
         });
