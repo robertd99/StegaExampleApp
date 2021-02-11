@@ -54,7 +54,6 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
 
         SocialMediaModel redditModel = new SocialMediaModel();
         reddit = new Reddit(redditModel);
-        reddit = new Reddit(redditModel);
         //puts reddits SocialMediaModel
         reddit.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
 
