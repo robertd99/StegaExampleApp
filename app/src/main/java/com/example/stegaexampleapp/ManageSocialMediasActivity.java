@@ -49,9 +49,13 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manage_social_medias);
         implSocialMediaResults = new ImplSocialMediaResults(this);
 
-        //sets a new emtpy SocialMediaModel, if you have keywords and lastTimChecked save you can either
+        //sets a SocialMediaModel, if you have keywords and lastTimChecked save you can either
         //set them via the SocialMediaModel itself or via the SocialMedia Controller
-        reddit = new Reddit(new SocialMediaModel());
+
+        SocialMediaModel redditModel = new SocialMediaModel();
+        redditModel.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
+        imgur = new Imgur(redditModel);
+        reddit = new Reddit(redditModel);
 
         //adds implSocialMediaResults as Listener. implSocialMediaResults will get updated on
         //the decoded Messages and when a lastTimeChecked for a specific keyword has changed
@@ -64,8 +68,10 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         Log.i("reddit subscribed keywords",String.join(", ", reddit.getAllSubscribedKeywordsAsList()));
         Log.i("reddit last time checked keywords",String.valueOf(reddit.getAllSubscribedKeywordsAndLastTimeChecked().toString()));
 
-
-        imgur = new Imgur(new SocialMediaModel());
+        SocialMediaModel imgurModel = new SocialMediaModel();
+        imgurModel.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.IMGUR));
+        imgur = new Imgur(imgurModel);
+        imgur.subscribeToKeyword("test");
         imgurOnOff = findViewById(R.id.imgurOnOff);
         imgurSwitch = findViewById(R.id.manageSocialMediasImgurSwitch);
         imgurResult = findViewById(R.id.imgurResult);
