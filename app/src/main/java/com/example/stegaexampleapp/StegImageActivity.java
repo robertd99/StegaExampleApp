@@ -90,7 +90,9 @@ public class StegImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
+                    //if the Data is of type PNG
                     if(getUriMimType(rawFileUri).equals("png") || getUriMimType(encodedFileUri).equals("png")) {
+                        //ImageSte() responsible for PNG Steganography
                         Steganography imageSteg = new ImageSteg();
                         byte[] decodedResult = imageSteg.decode(steganographyArray);
                         decodedTextView.setText(new String(decodedResult));
