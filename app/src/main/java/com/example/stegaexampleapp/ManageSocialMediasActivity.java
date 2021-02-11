@@ -53,9 +53,11 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         //set them via the SocialMediaModel itself or via the SocialMedia Controller
 
         SocialMediaModel redditModel = new SocialMediaModel();
-        redditModel.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
-        imgur = new Imgur(redditModel);
         reddit = new Reddit(redditModel);
+        reddit = new Reddit(redditModel);
+        //puts reddits SocialMediaModel
+        reddit.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
+
 
         //adds implSocialMediaResults as Listener. implSocialMediaResults will get updated on
         //the decoded Messages and when a lastTimeChecked for a specific keyword has changed
@@ -91,8 +93,6 @@ public class ManageSocialMediasActivity extends AppCompatActivity {
         reddit.subscribeToKeyword("zero");
         reddit.setLastTimeCheckedForKeyword("zero",400L);
 
-        //puts reddits SocialMediaModel
-        reddit.putAllSubscribedKeywordsAndLastTimeChecked(JSONPersistentManager.getInstance().getKeywordAndLastTimeCheckedMapForAPI(APINames.REDDIT));
 
 
 
